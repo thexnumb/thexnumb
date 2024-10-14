@@ -1,9 +1,9 @@
 - 👋 Hi, I’m @thexnumb
 - 👀 I’m interested in Security about Computers
 - 🌱 I’m currently learning Basics of OS
-- 💞️ I’m looking to collaborate on ...
+- 💞️ I’m looking to collaborate on Web Application Pentesting
 - 📫 How to reach me [telegram](https://t.me/thexnumb)
-- 😄 You can call me: Ali
+- 😄 You can call me Ali
 - ⚡ See latest blogs at: [thexnumb.com](https://thexnumb.com)
 
 <!---
