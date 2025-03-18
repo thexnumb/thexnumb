@@ -12,7 +12,7 @@ I'm a **26-year-old security researcher** who has been on a journey to break int
 ## 🔥 Weekly Productivity  
 
 ⏳ **Time Spent on Security Projects (via Toggl Track):**  
-![Toggl Time](https://raw.githubusercontent.com/YOUR_GITHUB_USERNAME/YOUR_REPO/main/toggl_time.svg)  
+![Toggl Time](https://raw.githubusercontent.com/thexnumb/thexnumb/edit/main/toggl_time.svg)  
 
 
 ## ✍️ Latest Medium Posts  
