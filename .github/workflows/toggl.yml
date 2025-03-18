@@ -15,8 +15,7 @@ jobs:
       - name: Fetch Toggl Time Data
         run: |
           curl -u "${{ secrets.TOGGL_API_TOKEN }}:api_token" \
-               -X GET "https://api.track.toggl.com/reports/api/v2/summary?workspace_id=${{ secrets.TOGGL_WORKSPACE_ID }}&since=\"$(date -d '1 month ago' +%Y-%m-%d)\"&until=\"$(date -d 'yesterday' +%Y-%m-%d)\"&project_ids=${{ secrets.PROJECT_ID }}&user_agent=${{ secrets.USER_AGENT }}" \
-               -H "Content-Type: application/json" > toggl_time.json
+               -X GET "https://api.track.toggl.com/reports/api/v2/summary?workspace_id=${{ secrets.TOGGL_WORKSPACE_ID }}&since=\"$(date -d '1 month ago' +%Y-%m-%d)\"&until=\"$(date -d 'yesterday' +%Y-%m-%d)\"&project_ids=${{ secrets.PROJECT_ID }}&user_agent=${{ secrets.USER_AGENT }}" > toggl_time.json
 
       - name: Generate SVG
         run: |
