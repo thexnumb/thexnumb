@@ -15,16 +15,20 @@ jobs:
       - name: Fetch Toggl Time Data
         run: |
           curl -u "${{ secrets.TOGGL_API_TOKEN }}:api_token" \
-               -X GET "https://api.track.toggl.com/reports/api/v2/summary?workspace_id=${{ secrets.TOGGL_WORKSPACE_ID }}&since=\"$(date -d '1 month ago' +%Y-%m-%d)\"&until=\"$(date -d 'yesterday' +%Y-%m-%d)\"&project_ids=${{ secrets.PROJECT_ID }}&user_agent=${{ secrets.USER_AGENT }}" > toggl_time.json
+               -X POST "https://api.track.toggl.com/reports/api/v3/workspaces/${{ secrets.TOGGL_WORKSPACE_ID }}/projects/${{ secrets.PROJECT_ID }}/summary" \
+               -H "Content-Type: application/json" \
+               -d '{
+                 "start_date": "'$(date -d '1 month ago' +%Y-%m-%d)'",
+                 "end_date": "'$(date -d 'yesterday' +%Y-%m-%d)'"
+               }' > toggl_time.json || exit 1
 
       - name: Generate SVG
-        run: |
-          python generate_svg.py
+        run: python generate_svg.py
 
       - name: Commit and Push Changes
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
-          git add toggl_time.svg
+          git add toggl_time.json toggl_time.svg
           git commit -m "Update Toggl tracking data" || echo "No changes to commit"
           git push
