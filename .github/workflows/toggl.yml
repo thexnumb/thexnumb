@@ -1,0 +1,31 @@
+name: Update Toggl Time Tracking
+
+on:
+  schedule:
+    - cron: "0 * * * *"  # Runs every hour
+  workflow_dispatch:
+
+jobs:
+  update-toggl-tracking:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Fetch Toggl Time Data
+        run: |
+          curl -u "${{ secrets.TOGGL_API_TOKEN }}:api_token" \
+               -X GET "https://api.track.toggl.com/api/v8/time_entries" \
+               -H "Content-Type: application/json" > toggl_time.json
+
+      - name: Generate SVG
+        run: |
+          python generate_svg.py
+
+      - name: Commit and Push Changes
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git add toggl_time.svg
+          git commit -m "Update Toggl tracking data" || echo "No changes to commit"
+          git push
