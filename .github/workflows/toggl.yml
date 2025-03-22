@@ -1,17 +1,21 @@
 name: Update Toggl Time Tracking
+
 on:
   schedule:
-    - cron: "0 * * * *"  # Runs every hour
+    - cron: "0 * * * *"  # Runs every hour at the start of the hour
   workflow_dispatch:
+
 jobs:
   update-toggl-tracking:
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
+      # Step 1: Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      # Step 2: Set Start and End Dates for Current Month
       - name: Set Start and End Dates for Current Month
         id: set_dates
         run: |
@@ -20,12 +24,14 @@ jobs:
           echo "FIRST_DAY_OF_WEEK=$FIRST_DAY_OF_WEEK" >> $GITHUB_ENV
           echo "LAST_DAY_OF_WEEK=$LAST_DAY_OF_WEEK" >> $GITHUB_ENV
 
+      # Step 3: Fetch Toggl Time Data
       - name: Fetch Toggl Time Data
         run: |
           curl -u "${{ secrets.TOGGL_API_TOKEN }}:api_token" \
                "https://api.track.toggl.com/reports/api/v2/summary?workspace_id=${{ secrets.TOGGL_WORKSPACE_ID }}&since=${FIRST_DAY_OF_WEEK}&until=${LAST_DAY_OF_WEEK}&project_ids=${{ secrets.PROJECT_ID }}&user_agent=thexnumb@gmail.com" \
                -o toggl_time.json
 
+      # Step 4: Encrypt and Upload Toggl Time Data
       - name: Encrypt and Upload Toggl Time Data
         uses: AlexGidarakos/upload-encrypted-artifact@v1.0.3
         with:
@@ -33,9 +39,28 @@ jobs:
           password: ${{ secrets.ENCRYPTION_PASSWORD }}
           remote-name: toggl_time.json.gpg
 
+      # Step 5: Set up Python environment
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      # Step 6: Install Python dependencies
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install python-gnupg
+
+      # Step 7: Decrypt the Toggl time data
+      - name: Decrypt Toggl Time Data
+        run: |
+          gpg --batch --yes --passphrase "${{ secrets.ENCRYPTION_PASSWORD }}" --output toggl_time.json --decrypt toggl_time.json.gpg
+
+      # Step 8: Generate SVG
       - name: Generate SVG
         run: python generate_svg.py
 
+      # Step 9: Commit and Push Changes
       - name: Commit and Push Changes
         run: |
           git config --global user.name "GitHub Actions"
@@ -43,3 +68,5 @@ jobs:
           git add toggl_time.svg toggl_time.json.gpg
           git commit -m "Update Toggl tracking data" || echo "No changes to commit"
           git push
+        env:
+          ENCRYPTION_PASSWORD: ${{ secrets.ENCRYPTION_PASSWORD }}
