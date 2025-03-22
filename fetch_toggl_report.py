@@ -53,10 +53,11 @@ hours = total_time_s // 3600
 minutes = (total_time_s % 3600) // 60
 
 # Generate SVG
-svg_content = f'''<svg width="300" height="100" xmlns="http://www.w3.org/2000/svg">
+svg_content = f'''<svg width="300" height="200" xmlns="http://www.w3.org/2000/svg">
     <rect width="100%" height="100%" fill="{hex_color}"/>
-    <text x="50%" y="40%" font-size="20" text-anchor="middle" fill="white">{project_name}</text>
-    <text x="50%" y="70%" font-size="18" text-anchor="middle" fill="white">{hours}h {minutes}m</text>
+    <text x="50%" y="30%" font-size="40" text-anchor="middle" fill="white">{project_name}</text>
+    <text x="50%" y="45%" font-size="15" text-anchor="middle" fill="white">From {start_date} to {end_date}</text>
+    <text x="50%" y="70%" font-size="35" text-anchor="middle" fill="white">{hours}h {minutes}m</text>
 </svg>'''
 
 # Save to SVG file
