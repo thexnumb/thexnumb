@@ -32,11 +32,17 @@ jobs:
         run: |
           mkdir -p $HOME/.gnupg
           chmod 700 $HOME/.gnupg
-          echo "use-agent" >> $HOME/.gnupg/gpg.conf
+          echo "use-agent" > $HOME/.gnupg/gpg.conf
           echo "pinentry-mode loopback" >> $HOME/.gnupg/gpg.conf
           echo "default-cache-ttl 600" >> $HOME/.gnupg/gpg.conf
           echo "max-cache-ttl 7200" >> $HOME/.gnupg/gpg.conf
         shell: bash
+
+      - name: Import GPG Key
+        run: |
+          echo "${{ secrets.GPG_PRIVATE_KEY }}" | base64 --decode | gpg --batch --import
+        env:
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
 
       - name: Encrypt and Upload Toggl Time Data
         uses: AlexGidarakos/upload-encrypted-artifact@v1.0.3
@@ -51,6 +57,11 @@ jobs:
           python generate_svg.py
         env:
           ENCRYPTION_PASSWORD: ${{ secrets.ENCRYPTION_PASSWORD }}
+
+      - name: Clean up decrypted files
+        run: |
+          rm -f toggl_time.json
+        shell: bash
 
       - name: Commit and Push Changes
         run: |
