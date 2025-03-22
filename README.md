@@ -23,7 +23,6 @@ I'm a **26-year-old security researcher** who has been on a journey to break int
 🔹 **Security Tools**: Burp Suite, Recon Tools  
 
 ## 🌐 Let's Connect  
-📢 **Follow me on:**  
 [![Twitter](https://img.shields.io/badge/X-@thexsecurity-1DA1F2?style=flat&logo=twitter&logoColor=white)](https://x.com/thexsecurity)  
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Profile-blue?style=flat&logo=linkedin)](#)  
 [![Medium](https://img.shields.io/badge/Medium-@thexnumb-black?style=flat&logo=medium)](https://medium.com/@thexnumb)  
