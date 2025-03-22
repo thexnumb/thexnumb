@@ -1,6 +1,7 @@
 import os
 import requests
 import json
+import base64
 from datetime import datetime, timedelta
 
 # Function to calculate the start and end dates of the previous week
@@ -16,32 +17,47 @@ os.environ['START_DATE'] = start_date
 os.environ['END_DATE'] = end_date
 
 # Fetch Weekly Report Data
-workspace_id = os.environ.get('TOGGL_WORKSPACE_ID')
-api_token = os.environ.get('TOGGL_API_TOKEN')
-url = f"https://api.track.toggl.com/reports/api/v3/workspace/{workspace_id}/weekly/time_entries"
-auth = (api_token, 'api_token')
-params = {
-    'start_date': start_date,
-    'end_date': end_date,
-    'user_agent': 'thexnumb@gmail.com'
+workspace_id = os.getenv('TOGGL_WORKSPACE_ID')
+project_id = os.getenv('TOGGL_PROJECT_ID')
+api_token = os.getenv('TOGGL_API_TOKEN')
+
+if not all([workspace_id, project_id, api_token]):
+    print("Error: Missing Toggl environment variables.")
+    exit(1)
+
+# API URL
+url = f"https://api.track.toggl.com/reports/api/v3/workspace/{workspace_id}/projects/{project_id}/summary"
+
+# Encode API Token
+auth_token = base64.b64encode(f"{api_token}:api_token".encode()).decode()
+
+# Headers
+headers = {
+    'Content-Type': 'application/json',
+    'Authorization': f'Basic {auth_token}'
 }
 
+# Request Payload
+payload = {
+    "start_date": start_date,
+    "end_date": end_date,
+    "startTime": "00:00:00"
+}
+
+# Send API Request
 try:
-    response = requests.post(url, auth=auth, data=params)
-    response.raise_for_status()  # Raise error for non-200 responses
+    response = requests.post(url, headers=headers, json=payload)
+    response.raise_for_status()  # Raise an error for non-200 responses
     data = response.json()
 except requests.exceptions.RequestException as e:
     print(f"Error fetching data: {e}")
-    data = {}
+    exit(1)
 except json.JSONDecodeError:
     print("Error: Received invalid JSON response.")
-    data = {}
+    exit(1)
 
-# Extract project title and time safely
-if isinstance(data, dict) and "data" in data:
-    project_entry = next(iter(data["data"]), {})
-else:
-    project_entry = {}
+# Extract project title and total time
+project_entry = next(iter(data.get("data", [])), {})
 
 project_name = project_entry.get("title", {}).get("project", "Unknown")
 total_time_ms = project_entry.get("time", 0)
