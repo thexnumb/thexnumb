@@ -15,15 +15,15 @@ jobs:
       - name: Set Start and End Dates for Current Month
         id: set_dates
         run: |
-          FIRST_DAY_OF_MONTH=$(date -u -d "$(date +'%Y-%m-01')" +'%Y-%m-%d')
-          LAST_DAY_OF_MONTH=$(date -u -d "$(date +'%Y-%m-01 +1 month -1 day')" +'%Y-%m-%d')
-          echo "FIRST_DAY_OF_MONTH=$FIRST_DAY_OF_MONTH" >> $GITHUB_ENV
-          echo "LAST_DAY_OF_MONTH=$LAST_DAY_OF_MONTH" >> $GITHUB_ENV
+          FIRST_DAY_OF_WEEK=$(date -u -d "$(date +'%Y-%m-01')" +'%Y-%m-%d')
+          LAST_DAY_OF_WEEK=$(date -u -d "$(date +'%Y-%m-01 +1 week -1 day')" +'%Y-%m-%d')
+          echo "FIRST_DAY_OF_WEEK=$FIRST_DAY_OF_WEEK" >> $GITHUB_ENV
+          echo "LAST_DAY_OF_WEEK=$LAST_DAY_OF_WEEK" >> $GITHUB_ENV
 
       - name: Fetch Toggl Time Data
         run: |
           curl -u "${{ secrets.TOGGL_API_TOKEN }}:api_token" \
-               "https://api.track.toggl.com/reports/api/v2/summary?workspace_id=${{ secrets.TOGGL_WORKSPACE_ID }}&since=${FIRST_DAY_OF_MONTH}&until=${LAST_DAY_OF_MONTH}&project_ids=${{ secrets.PROJECT_ID }}&user_agent=your_email@example.com" \
+               "https://api.track.toggl.com/reports/api/v2/summary?workspace_id=${{ secrets.TOGGL_WORKSPACE_ID }}&since=${FIRST_DAY_OF_WEEK}&until=${LAST_DAY_OF_WEEK}&project_ids=${{ secrets.PROJECT_ID }}&user_agent=thexnumb@gmail.com" \
                -o toggl_time.json
 
       - name: Encrypt and Upload Toggl Time Data
