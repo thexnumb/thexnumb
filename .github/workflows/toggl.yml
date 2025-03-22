@@ -26,11 +26,6 @@ jobs:
                "https://api.track.toggl.com/reports/api/v2/summary?workspace_id=${{ secrets.TOGGL_WORKSPACE_ID }}&since=${FIRST_DAY_OF_MONTH}&until=${LAST_DAY_OF_MONTH}&project_ids=${{ secrets.PROJECT_ID }}&user_agent=your_email@example.com" \
                -o toggl_time.json
 
-      - name: Debug - Display JSON data
-        run: |
-          echo "JSON data content:"
-          cat toggl_time.json
-
       - name: Generate SVG
         run: python generate_svg.py
 
