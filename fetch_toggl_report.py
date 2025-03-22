@@ -53,11 +53,21 @@ hours = total_time_s // 3600
 minutes = (total_time_s % 3600) // 60
 
 # Generate SVG
-svg_content = f'''<svg width="300" height="200" xmlns="http://www.w3.org/2000/svg">
-    <rect width="100%" height="100%" fill="{hex_color}"/>
-    <text x="50%" y="30%" font-size="40" text-anchor="middle" fill="white">{project_name}</text>
-    <text x="50%" y="45%" font-size="15" text-anchor="middle" fill="white">From {start_date} to {end_date}</text>
-    <text x="50%" y="70%" font-size="35" text-anchor="middle" fill="white">{hours}h {minutes}m</text>
+svg_content = f'''<svg width="260" height="130" xmlns="http://www.w3.org/2000/svg">
+    <!-- Background with Rounded Corners -->
+    <rect width="100%" height="100%" rx="15" ry="15" fill="{hex_color}" />
+
+    <!-- Project Name -->
+    <text x="50%" y="22%" font-size="24" font-family="Arial, sans-serif" font-weight="bold"
+        text-anchor="middle" fill="white">{project_name}</text>
+
+    <!-- Date Range -->
+    <text x="50%" y="45%" font-size="14" font-family="Arial, sans-serif"
+        text-anchor="middle" fill="white">From {start_date} to {end_date}</text>
+
+    <!-- Time Spent -->
+    <text x="50%" y="72%" font-size="30" font-family="Arial, sans-serif" font-weight="bold"
+        text-anchor="middle" fill="white">{hours}h {minutes}m</text>
 </svg>'''
 
 # Save to SVG file
