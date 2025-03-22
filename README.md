@@ -4,15 +4,15 @@ I'm a **26-year-old security researcher** who has been on a journey to break int
 🔎 My favorite vulnerability type? **Broken Authentication**—digging into authentication flaws and bypass techniques is what excites me the most!  
 🚀 My motto: **"Just go with the flow and enjoy the journey!"** 😊  
 
-## 🔥 Weekly 
-⏳ **Time Spent on:**  
-![Toggl Time](./toggl_weekly_Security_report.svg) ![Toggl Time](./toggl_weekly_Personal_report.svg)
-
 ## ✍️ Latest Medium Posts  
 📖 **Read my latest article:**  
 <!-- MEDIUM_POSTS_START -->
 ![Recent Article](https://github-readme-medium-recent-article.vercel.app/medium/@thexnumb/0)
 <!-- MEDIUM_POSTS_END -->
+
+## 🔥 Weekly 
+⏳ **Time Spent on:**  
+![Toggl Time](./toggl_weekly_Security_report.svg) ![Toggl Time](./toggl_weekly_Personal_report.svg)
 
 ## 📊 GitHub Stats  
 ![GitHub Stats](https://github-readme-stats.vercel.app/api?username=thexnumb&show_icons=true&theme=dark)  
