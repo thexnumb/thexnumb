@@ -18,61 +18,100 @@ os.environ['END_DATE'] = end_date
 
 # Fetch Weekly Report Data
 workspace_id = os.getenv('TOGGL_WORKSPACE_ID')
-project_id = os.getenv('PROJECT_ID')  # <-- Corrected variable name
+project_sec = os.getenv('PROJECT_ID')
+project_per = os.getenv('PROJECT_PER')
 api_token = os.getenv('TOGGL_API_TOKEN')
 
-# API URL
-url = f"https://api.track.toggl.com/reports/api/v3/workspace/{workspace_id}/projects/{project_id}/summary"
+def create_svg (id):
+    # API URL
+    url = f"https://api.track.toggl.com/reports/api/v3/workspace/{workspace_id}/projects/{id}/summary"
+    # Encode API Token
+    auth_token = base64.b64encode(f"{api_token}:api_token".encode()).decode()
+    # Headers
+    headers = {
+        'Content-Type': 'application/json',
+        'Authorization': f'Basic {auth_token}'
+    }
 
-# Encode API Token
-auth_token = base64.b64encode(f"{api_token}:api_token".encode()).decode()
+    # Request Payload
+    payload = {
+        "start_date": start_date,
+        "end_date": end_date,
+    }
 
-# Headers
-headers = {
-    'Content-Type': 'application/json',
-    'Authorization': f'Basic {auth_token}'
-}
+    # Send API Request
+    response = requests.post(url, headers=headers, json=payload)
+    data = response.json()
 
-# Request Payload
-payload = {
-    "start_date": start_date,
-    "end_date": end_date,
-}
+    if id == project_sec:
+        # Set Project name and Total Time
+        project_name = "Security"
+        total_time_s = data['seconds']
+        hex_color = "#2da608"
 
-# Send API Request
-response = requests.post(url, headers=headers, json=payload)
-data = response.json()
+        # Calculate Hours and Minutes
+        hours = total_time_s // 3600
+        minutes = (total_time_s % 3600) // 60
 
-# Set Project name and Total Time
-project_name = "Security"
-total_time_s = data['seconds']
-hex_color = "#2da608"
+        # Generate SVG
+        svg_content = f'''<svg width="260" height="130" xmlns="http://www.w3.org/2000/svg">
+            <!-- Background with Rounded Corners -->
+            <rect width="100%" height="100%" rx="15" ry="15" fill="{hex_color}" />
 
-# Calculate Hours and Minutes
-hours = total_time_s // 3600
-minutes = (total_time_s % 3600) // 60
+            <!-- Project Name -->
+            <text x="50%" y="22%" font-size="24" font-family="Arial, sans-serif" font-weight="bold"
+                text-anchor="middle" fill="white">{project_name}</text>
 
-# Generate SVG
-svg_content = f'''<svg width="260" height="130" xmlns="http://www.w3.org/2000/svg">
-    <!-- Background with Rounded Corners -->
-    <rect width="100%" height="100%" rx="15" ry="15" fill="{hex_color}" />
+            <!-- Date Range -->
+            <text x="50%" y="45%" font-size="14" font-family="Arial, sans-serif"
+                text-anchor="middle" fill="white">From {start_date} to {end_date}</text>
 
-    <!-- Project Name -->
-    <text x="50%" y="22%" font-size="24" font-family="Arial, sans-serif" font-weight="bold"
-        text-anchor="middle" fill="white">{project_name}</text>
+            <!-- Time Spent -->
+            <text x="50%" y="72%" font-size="30" font-family="Arial, sans-serif" font-weight="bold"
+                text-anchor="middle" fill="white">{hours}h {minutes}m</text>
+        </svg>'''
 
-    <!-- Date Range -->
-    <text x="50%" y="45%" font-size="14" font-family="Arial, sans-serif"
-        text-anchor="middle" fill="white">From {start_date} to {end_date}</text>
+        # Save to SVG file
+        svg_filename = f'toggl_weekly_{project_name}_report.svg'
+        with open(svg_filename, 'w') as svg_file:
+            svg_file.write(svg_content)
 
-    <!-- Time Spent -->
-    <text x="50%" y="72%" font-size="30" font-family="Arial, sans-serif" font-weight="bold"
-        text-anchor="middle" fill="white">{hours}h {minutes}m</text>
-</svg>'''
+        print(f"SVG file generated successfully: {svg_filename}")
 
-# Save to SVG file
-svg_filename = 'toggl_weekly_report.svg'
-with open(svg_filename, 'w') as svg_file:
-    svg_file.write(svg_content)
+    else:
+        # Set Project name and Total Time
+        project_name = "Personal"
+        total_time_s = data['seconds']
+        hex_color = "#FFA500"
 
-print(f"SVG file generated successfully: {svg_filename}")
+        # Calculate Hours and Minutes
+        hours = total_time_s // 3600
+        minutes = (total_time_s % 3600) // 60
+
+        # Generate SVG
+        svg_content = f'''<svg width="260" height="130" xmlns="http://www.w3.org/2000/svg">
+            <!-- Background with Rounded Corners -->
+            <rect width="100%" height="100%" rx="15" ry="15" fill="{hex_color}" />
+
+            <!-- Project Name -->
+            <text x="50%" y="22%" font-size="24" font-family="Arial, sans-serif" font-weight="bold"
+                text-anchor="middle" fill="white">{project_name}</text>
+
+            <!-- Date Range -->
+            <text x="50%" y="45%" font-size="14" font-family="Arial, sans-serif"
+                text-anchor="middle" fill="white">From {start_date} to {end_date}</text>
+
+            <!-- Time Spent -->
+            <text x="50%" y="72%" font-size="30" font-family="Arial, sans-serif" font-weight="bold"
+                text-anchor="middle" fill="white">{hours}h {minutes}m</text>
+        </svg>'''
+
+        # Save to SVG file
+        svg_filename = f'toggl_weekly_{project_name}_report.svg'
+        with open(svg_filename, 'w') as svg_file:
+            svg_file.write(svg_content)
+
+        print(f"SVG file generated successfully: {svg_filename}")
+
+create_svg(205117233)
+create_svg(205117652)
