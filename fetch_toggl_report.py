@@ -7,9 +7,9 @@ from datetime import datetime, timedelta
 # Function to calculate the start and end dates of the previous week
 def get_previous_week_dates():
     today = datetime.today()
-    start_of_week = today - timedelta(days=today.weekday() + 7)
-    end_of_week = start_of_week + timedelta(days=6)
-    return start_of_week.strftime('%Y-%m-%d'), end_of_week.strftime('%Y-%m-%d')
+    start_of_week = today - timedelta(days=7)  # 7 days ago
+    end_of_week = today - timedelta(days=1)    # Yesterday
+    return start_of_week.date().strftime('%Y-%m-%d'), end_of_week.date().strftime('%Y-%m-%d')
 
 # Set Start and End Dates for the Previous Week
 start_date, end_date = get_previous_week_dates()
@@ -20,14 +20,6 @@ os.environ['END_DATE'] = end_date
 workspace_id = os.getenv('TOGGL_WORKSPACE_ID')
 project_id = os.getenv('PROJECT_ID')  # <-- Corrected variable name
 api_token = os.getenv('TOGGL_API_TOKEN')
-
-# Ensure all required variables are set
-if not all([workspace_id, project_id, api_token]):
-    print("Error: Missing Toggl environment variables.")
-    print(f"TOGGL_WORKSPACE_ID: {workspace_id}")
-    print(f"PROJECT_ID: {project_id}")
-    print(f"TOGGL_API_TOKEN: {'Set' if api_token else 'Missing'}")
-    exit(1)
 
 # API URL
 url = f"https://api.track.toggl.com/reports/api/v3/workspace/{workspace_id}/projects/{project_id}/summary"
@@ -45,32 +37,20 @@ headers = {
 payload = {
     "start_date": start_date,
     "end_date": end_date,
-    "startTime": "00:00:00"
 }
 
 # Send API Request
-try:
-    response = requests.post(url, headers=headers, json=payload)
-    response.raise_for_status()  # Raise an error for non-200 responses
-    data = response.json()
-except requests.exceptions.RequestException as e:
-    print(f"Error fetching data: {e}")
-    exit(1)
-except json.JSONDecodeError:
-    print("Error: Received invalid JSON response.")
-    exit(1)
+response = requests.post(url, headers=headers, json=payload)
+data = response.json()
 
-# Extract project title and total time
-project_entry = next(iter(data.get("data", [])), {})
+# Set Project name and Total Time
+project_name = "Security"
+total_time_s = data['seconds']
+hex_color = "#2da608"
 
-project_name = project_entry.get("title", {}).get("project", "Unknown")
-total_time_ms = project_entry.get("time", 0)
-hex_color = project_entry.get("title", {}).get("hex_color", "#2da608")
-
-# Convert milliseconds to hours and minutes
-total_minutes = total_time_ms // 60000
-hours = total_minutes // 60
-minutes = total_minutes % 60
+# Calculate Hours and Minutes
+hours = total_time_s // 3600
+minutes = (total_time_s % 3600) // 60
 
 # Generate SVG
 svg_content = f'''<svg width="300" height="100" xmlns="http://www.w3.org/2000/svg">
