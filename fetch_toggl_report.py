@@ -25,12 +25,23 @@ params = {
     'end_date': end_date,
     'user_agent': 'thexnumb@gmail.com'
 }
-response = requests.post(url, auth=auth, data=params)
 
-data = response.json()
+try:
+    response = requests.post(url, auth=auth, data=params)
+    response.raise_for_status()  # Raise error for non-200 responses
+    data = response.json()
+except requests.exceptions.RequestException as e:
+    print(f"Error fetching data: {e}")
+    data = {}
+except json.JSONDecodeError:
+    print("Error: Received invalid JSON response.")
+    data = {}
 
-# Extract project title and time using next()
-project_entry = next(iter(data.get("data", [])), {})
+# Extract project title and time safely
+if isinstance(data, dict) and "data" in data:
+    project_entry = next(iter(data["data"]), {})
+else:
+    project_entry = {}
 
 project_name = project_entry.get("title", {}).get("project", "Unknown")
 total_time_ms = project_entry.get("time", 0)
