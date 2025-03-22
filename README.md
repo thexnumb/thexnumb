@@ -5,13 +5,13 @@ I'm a **26-year-old security researcher** who has been on a journey to break int
 🚀 My motto: **"Just go with the flow and enjoy the journey!"** 😊  
 
 ## 🔥 Weekly Productivity  
-⏳ **Time Spent on Security Projects (via Toggl Track):**  
+⏳ **Time Spent on:**  
 ![Toggl Time](./toggl_time.svg)  
 
 ## ✍️ Latest Medium Posts  
 📖 **Read my latest articles:**  
 <!-- MEDIUM_POSTS_START -->
-- [Loading latest posts...](#)
+![Recent Article](https://github-readme-medium-recent-article.vercel.app/medium/@thexnumb/0)
 <!-- MEDIUM_POSTS_END -->
 
 ## 📊 GitHub Stats  
