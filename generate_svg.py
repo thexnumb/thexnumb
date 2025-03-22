@@ -1,68 +1,62 @@
-import gnupg
+import csv
 import os
-import json
+import subprocess
+import requests
+from datetime import datetime, timedelta
 
-# Initialize the GPG object
-gpg = gnupg.GPG()
+# Function to calculate the start and end dates of the previous week
+def get_previous_week_dates():
+    today = datetime.today()
+    start_of_week = today - timedelta(days=today.weekday() + 7)
+    end_of_week = start_of_week + timedelta(days=6)
+    return start_of_week.strftime('%Y-%m-%d'), end_of_week.strftime('%Y-%m-%d')
 
-# Define the file paths
-encrypted_file_path = 'toggl_time.json.gpg'
-decrypted_file_path = 'toggl_time.json'
+# Set Start and End Dates for the Previous Week
+start_date, end_date = get_previous_week_dates()
+os.environ['START_DATE'] = start_date
+os.environ['END_DATE'] = end_date
 
-# Retrieve the encryption password from environment variables
-password = os.getenv('ENCRYPTION_PASSWORD')
-if not password:
-    raise ValueError("Encryption password not set in environment variables.")
+# Fetch Weekly Report Data
+workspace_id = os.environ.get('TOGGL_WORKSPACE_ID')
+api_token = os.environ.get('TOGGL_API_TOKEN')
+url = f"https://api.track.toggl.com/reports/api/v3/workspace/{workspace_id}/weekly/time_entries.csv"
+auth = (api_token, 'api_token')
+params = {
+    'start_date': start_date,
+    'end_date': end_date,
+    'user_agent': 'thexnumb@gmail.com'
+}
+response = requests.post(url, auth=auth, data=params)
 
-# Decrypt the file
-with open(encrypted_file_path, 'rb') as enc_file:
-    status = gpg.decrypt_file(enc_file, passphrase=password, output=decrypted_file_path)
+# Save the CSV response to a file
+csv_filename = 'toggl_weekly_report.csv'
+with open(csv_filename, 'wb') as f:
+    f.write(response.content)
 
-if status.ok:
-    print(f"File decrypted successfully: {decrypted_file_path}")
-    try:
-        # Open and process the decrypted JSON file
-        with open(decrypted_file_path, 'r') as f:
-            data = json.load(f)
+# Process the CSV Data
+project_name = "Security"
+total_time_ms = 0
+with open(csv_filename, 'r') as f:
+    reader = csv.DictReader(f)
+    for row in reader:
+        if row['Project'] == project_name:
+            total_time_ms += int(row['Duration (ms)'])
 
-        # Extract project details
-        project_data = data.get('data', [])[0] if data.get('data') else None
-        if project_data:
-            project_name = project_data.get('title', {}).get('project', 'Unknown Project')
-            total_time_ms = project_data.get('time', 0)
-            
-            # Convert milliseconds to hours and minutes
-            total_minutes = total_time_ms // 60000
-            hours = total_minutes // 60
-            minutes = total_minutes % 60
-            
-            # SVG content
-            svg_content = f'''<svg width="300" height="100" xmlns="http://www.w3.org/2000/svg">
-                <rect width="100%" height="100%" fill="#2da608"/>
-                <text x="50%" y="40%" font-size="20" text-anchor="middle" fill="white">{project_name}</text>
-                <text x="50%" y="70%" font-size="18" text-anchor="middle" fill="white">{hours}h {minutes}m</text>
-            </svg>'''
-            
-            # Save to SVG file
-            svg_file_path = 'toggl_time.svg'
-            with open(svg_file_path, 'w') as svg_file:
-                svg_file.write(svg_content)
-            print(f"SVG file generated successfully: {svg_file_path}")
-        else:
-            print("No project data found in the JSON.")
-    except (KeyError, IndexError) as e:
-        print(f"Error processing Toggl data: {e}")
-        # Generate a placeholder SVG in case of errors
-        placeholder_svg = '''<svg width="300" height="100" xmlns="http://www.w3.org/2000/svg">
-            <rect width="100%" height="100%" fill="#cccccc"/>
-            <text x="50%" y="50%" font-size="16" text-anchor="middle" fill="black">No Toggl data available</text>
-        </svg>'''
-        with open('toggl_time.svg', 'w') as svg_file:
-            svg_file.write(placeholder_svg)
-    finally:
-        # Ensure the decrypted file is deleted after processing
-        if os.path.exists(decrypted_file_path):
-            os.remove(decrypted_file_path)
-            print(f"Decrypted file {decrypted_file_path} deleted successfully.")
-else:
-    print(f"Decryption failed: {status.stderr}")
+# Convert milliseconds to hours and minutes
+total_minutes = total_time_ms // 60000
+hours = total_minutes // 60
+minutes = total_minutes % 60
+
+# Generate SVG
+svg_content = f'''<svg width="300" height="100" xmlns="http://www.w3.org/2000/svg">
+    <rect width="100%" height="100%" fill="#2da608"/>
+    <text x="50%" y="40%" font-size="20" text-anchor="middle" fill="white">{project_name}</text>
+    <text x="50%" y="70%" font-size="18" text-anchor="middle" fill="white">{hours}h {minutes}m</text>
+</svg>'''
+
+# Save to SVG file
+svg_filename = 'toggl_weekly_report.svg'
+with open(svg_filename, 'w') as svg_file:
+    svg_file.write(svg_content)
+
+print(f"SVG file generated successfully: {svg_filename}")
