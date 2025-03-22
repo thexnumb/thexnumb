@@ -18,11 +18,15 @@ os.environ['END_DATE'] = end_date
 
 # Fetch Weekly Report Data
 workspace_id = os.getenv('TOGGL_WORKSPACE_ID')
-project_id = os.getenv('TOGGL_PROJECT_ID')
+project_id = os.getenv('PROJECT_ID')  # <-- Corrected variable name
 api_token = os.getenv('TOGGL_API_TOKEN')
 
+# Ensure all required variables are set
 if not all([workspace_id, project_id, api_token]):
     print("Error: Missing Toggl environment variables.")
+    print(f"TOGGL_WORKSPACE_ID: {workspace_id}")
+    print(f"PROJECT_ID: {project_id}")
+    print(f"TOGGL_API_TOKEN: {'Set' if api_token else 'Missing'}")
     exit(1)
 
 # API URL
@@ -59,9 +63,9 @@ except json.JSONDecodeError:
 # Extract project title and total time
 project_entry = next(iter(data.get("data", [])), {})
 
-project_name = project_entry.get("title", {}).get("project")
-total_time_ms = project_entry.get("time")
-hex_color = project_entry.get("title", {}).get("hex_color")
+project_name = project_entry.get("title", {}).get("project", "Unknown")
+total_time_ms = project_entry.get("time", 0)
+hex_color = project_entry.get("title", {}).get("hex_color", "#2da608")
 
 # Convert milliseconds to hours and minutes
 total_minutes = total_time_ms // 60000
