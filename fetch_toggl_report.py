@@ -59,9 +59,9 @@ except json.JSONDecodeError:
 # Extract project title and total time
 project_entry = next(iter(data.get("data", [])), {})
 
-project_name = project_entry.get("title", {}).get("project", "Unknown")
-total_time_ms = project_entry.get("time", 0)
-hex_color = project_entry.get("title", {}).get("hex_color", "#2da608")
+project_name = project_entry.get("title", {}).get("project")
+total_time_ms = project_entry.get("time")
+hex_color = project_entry.get("title", {}).get("hex_color")
 
 # Convert milliseconds to hours and minutes
 total_minutes = total_time_ms // 60000
