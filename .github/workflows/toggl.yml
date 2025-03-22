@@ -11,21 +11,33 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+
+      - name: Set Start and End Dates for Current Month
+        id: set_dates
+        run: |
+          FIRST_DAY_OF_MONTH=$(date -d "$(date +'%Y-%m-01')" +'%Y-%m-%d')
+          LAST_DAY_OF_MONTH=$(date -d "$(date +'%Y-%m-01 +1 month -1 day')" +'%Y-%m-%d')
+          echo "FIRST_DAY_OF_MONTH=$FIRST_DAY_OF_MONTH" >> $GITHUB_ENV
+          echo "LAST_DAY_OF_MONTH=$LAST_DAY_OF_MONTH" >> $GITHUB_ENV
+
       - name: Fetch Toggl Time Data
         run: |
           curl -u "${{ secrets.TOGGL_API_TOKEN }}:api_token" \
                -X POST "https://api.track.toggl.com/reports/api/v3/workspaces/${{ secrets.TOGGL_WORKSPACE_ID }}/projects/${{ secrets.PROJECT_ID }}/summary" \
                -H "Content-Type: application/json" \
                -d '{
-                 "start_date": "'$(date -d "1 month ago" +%Y-%m-%d)'",
-                 "end_date": "'$(date -d "yesterday" +%Y-%m-%d)'"
-               }' > toggl_time.json || exit 1
+                 "start_date": "'"${FIRST_DAY_OF_MONTH}"'",
+                 "end_date": "'"${LAST_DAY_OF_MONTH}"'"
+               }' > toggl_time.json
+
       - name: Debug - Display JSON data
         run: |
           echo "JSON data content:"
           cat toggl_time.json
+
       - name: Generate SVG
         run: python generate_svg.py
+
       - name: Commit and Push Changes
         run: |
           git config --global user.name "GitHub Actions"
