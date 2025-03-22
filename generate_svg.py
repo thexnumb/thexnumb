@@ -20,12 +20,12 @@ with open(encrypted_file_path, 'rb') as enc_file:
 
 if status.ok:
     print(f"File decrypted successfully: {decrypted_file_path}")
-    # Proceed with processing the decrypted JSON file
-    with open(decrypted_file_path, 'r') as f:
-        data = json.load(f)
-
-    # Extract project details
     try:
+        # Open and process the decrypted JSON file
+        with open(decrypted_file_path, 'r') as f:
+            data = json.load(f)
+
+        # Extract project details
         project_data = data.get('data', [])[0] if data.get('data') else None
         if project_data:
             project_name = project_data.get('title', {}).get('project', 'Unknown Project')
@@ -59,5 +59,10 @@ if status.ok:
         </svg>'''
         with open('toggl_time.svg', 'w') as svg_file:
             svg_file.write(placeholder_svg)
+    finally:
+        # Ensure the decrypted file is deleted after processing
+        if os.path.exists(decrypted_file_path):
+            os.remove(decrypted_file_path)
+            print(f"Decrypted file {decrypted_file_path} deleted successfully.")
 else:
     print(f"Decryption failed: {status.stderr}")
