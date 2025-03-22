@@ -26,6 +26,13 @@ jobs:
                "https://api.track.toggl.com/reports/api/v2/summary?workspace_id=${{ secrets.TOGGL_WORKSPACE_ID }}&since=${FIRST_DAY_OF_MONTH}&until=${LAST_DAY_OF_MONTH}&project_ids=${{ secrets.PROJECT_ID }}&user_agent=your_email@example.com" \
                -o toggl_time.json
 
+      - name: Encrypt and Upload Toggl Time Data
+        uses: AlexGidarakos/upload-encrypted-artifact@v1.0.3
+        with:
+          source: toggl_time.json
+          password: ${{ secrets.ENCRYPTION_PASSWORD }}
+          remote-name: toggl_time.json.gpg
+
       - name: Generate SVG
         run: python generate_svg.py
 
@@ -33,6 +40,6 @@ jobs:
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
-          git add toggl_time.json toggl_time.svg
+          git add toggl_time.svg
           git commit -m "Update Toggl tracking data" || echo "No changes to commit"
           git push
