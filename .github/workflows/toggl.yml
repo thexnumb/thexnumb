@@ -1,30 +1,31 @@
 name: Update Toggl Time Tracking
-
 on:
   schedule:
     - cron: "0 * * * *"  # Runs every hour
   workflow_dispatch:
-
 jobs:
   update-toggl-tracking:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-
       - name: Fetch Toggl Time Data
         run: |
           curl -u "${{ secrets.TOGGL_API_TOKEN }}:api_token" \
                -X POST "https://api.track.toggl.com/reports/api/v3/workspaces/${{ secrets.TOGGL_WORKSPACE_ID }}/projects/${{ secrets.PROJECT_ID }}/summary" \
                -H "Content-Type: application/json" \
                -d '{
-                 "start_date": "'$(date -d '1 month ago' +%Y-%m-%d)'",
-                 "end_date": "'$(date -d 'yesterday' +%Y-%m-%d)'"
+                 "start_date": "'$(date -d "1 month ago" +%Y-%m-%d)'",
+                 "end_date": "'$(date -d "yesterday" +%Y-%m-%d)'"
                }' > toggl_time.json || exit 1
-
+      - name: Debug - Display JSON data
+        run: |
+          echo "JSON data content:"
+          cat toggl_time.json
       - name: Generate SVG
         run: python generate_svg.py
-
       - name: Commit and Push Changes
         run: |
           git config --global user.name "GitHub Actions"
