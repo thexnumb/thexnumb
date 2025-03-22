@@ -25,7 +25,7 @@ jobs:
       - name: Fetch Toggl Time Data
         run: |
           curl -u "${{ secrets.TOGGL_API_TOKEN }}:api_token" \
-               "https://api.track.toggl.com/reports/api/v2/summary?workspace_id=${{ secrets.TOGGL_WORKSPACE_ID }}&since=${FIRST_DAY_OF_WEEK}&until=${LAST_DAY_OF_WEEK}&project_ids=${{ secrets.PROJECT_ID }}&user_agent=your_email@example.com" \
+               "https://api.track.toggl.com/reports/api/v2/summary?workspace_id=${{ secrets.TOGGL_WORKSPACE_ID }}&since=${FIRST_DAY_OF_WEEK}&until=${LAST_DAY_OF_WEEK}&project_ids=${{ secrets.PROJECT_ID }}&user_agent=thexnumb@gmail.com" \
                -o toggl_time.json
 
       - name: Set up GPG
