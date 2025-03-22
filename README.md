@@ -6,7 +6,7 @@ I'm a **26-year-old security researcher** who has been on a journey to break int
 
 ## 🔥 Weekly 
 ⏳ **Time Spent on:**  
-![Toggl Time](./toggl_weekly_report.svg)  
+![Toggl Time](./toggl_weekly_Security_report.svg) ![Toggl Time](./toggl_weekly_Personal_report.svg)
 
 ## ✍️ Latest Medium Posts  
 📖 **Read my latest article:**  
