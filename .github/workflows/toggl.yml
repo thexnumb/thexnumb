@@ -1,12 +1,12 @@
-name: Update Toggl Time Tracking
+name: Update Toggl Weekly Report
 
 on:
   schedule:
-    - cron: "0 * * * *"  # Runs every hour
+    - "0 * * * *"  # Runs every hour
   workflow_dispatch:
 
 jobs:
-  update-toggl-tracking:
+  update-toggl-report:
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -14,59 +14,28 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Set Start and End Dates for Current Month
-        id: set_dates
-        run: |
-          FIRST_DAY_OF_WEEK=$(date -u -d "$(date +'%Y-%m-01')" +'%Y-%m-%d')
-          LAST_DAY_OF_WEEK=$(date -u -d "$(date +'%Y-%m-01 +1 week -1 day')" +'%Y-%m-%d')
-          echo "FIRST_DAY_OF_WEEK=$FIRST_DAY_OF_WEEK" >> $GITHUB_ENV
-          echo "LAST_DAY_OF_WEEK=$LAST_DAY_OF_WEEK" >> $GITHUB_ENV
-
-      - name: Fetch Toggl Time Data
-        run: |
-          curl -u "${{ secrets.TOGGL_API_TOKEN }}:api_token" \
-               "https://api.track.toggl.com/reports/api/v2/summary?workspace_id=${{ secrets.TOGGL_WORKSPACE_ID }}&since=${FIRST_DAY_OF_WEEK}&until=${LAST_DAY_OF_WEEK}&project_ids=${{ secrets.PROJECT_ID }}&user_agent=thexnumb@gmail.com" \
-               -o toggl_time.json
-
-      - name: Set up GPG
-        run: |
-          mkdir -p $HOME/.gnupg
-          chmod 700 $HOME/.gnupg
-          echo "use-agent" > $HOME/.gnupg/gpg.conf
-          echo "pinentry-mode loopback" >> $HOME/.gnupg/gpg.conf
-          echo "default-cache-ttl 600" >> $HOME/.gnupg/gpg.conf
-          echo "max-cache-ttl 7200" >> $HOME/.gnupg/gpg.conf
-        shell: bash
-
-      - name: Import GPG Key
-        run: |
-          echo "${{ secrets.GPG_PRIVATE_KEY }}" | base64 --decode | gpg --batch --import
-        env:
-          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
-
-      - name: Encrypt and Upload Toggl Time Data
-        uses: AlexGidarakos/upload-encrypted-artifact@v1.0.3
+      - name: Set up Python
+        uses: actions/setup-python@v4
         with:
-          source: toggl_time.json
-          password: ${{ secrets.ENCRYPTION_PASSWORD }}
-          remote-name: toggl_time.json.gpg
+          python-version: '3.10'  # Specify the Python version you need
 
-      - name: Generate SVG
+      - name: Install dependencies
         run: |
-          pip install python-gnupg
-          python generate_svg.py
+          python -m pip install --upgrade pip
+          pip install requests  # Install the 'requests' library for making HTTP requests
+
+      - name: Run Toggl report script
         env:
-          ENCRYPTION_PASSWORD: ${{ secrets.ENCRYPTION_PASSWORD }}
-
-      - name: Clean up decrypted files
+          TOGGL_API_TOKEN: ${{ secrets.TOGGL_API_TOKEN }}
+          TOGGL_WORKSPACE_ID: ${{ secrets.TOGGL_WORKSPACE_ID }}
+          PROJECT_ID: ${{ secrets.PROJECT_ID }}
         run: |
-          rm -f toggl_time.json
-        shell: bash
+          python fetch_toggl_report.py
 
-      - name: Commit and Push Changes
+      - name: Commit and push changes
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
-          git add toggl_time.svg toggl_time.json.gpg
-          git commit -m "Update Toggl tracking data" || echo "No changes to commit"
+          git add toggl_weekly_report.svg
+          git commit -m "Update Toggl weekly report" || echo "No changes to commit"
           git push
