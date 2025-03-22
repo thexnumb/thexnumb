@@ -12,6 +12,8 @@ I'm a **26-year-old security researcher** who has been on a journey to break int
 📖 **Read my latest articles:**  
 <!-- MEDIUM_POSTS_START -->
 ![Recent Article](https://github-readme-medium-recent-article.vercel.app/medium/@thexnumb/0)
+![Recent Article](https://github-readme-medium-recent-article.vercel.app/medium/@thexnumb/1)
+![Recent Article](https://github-readme-medium-recent-article.vercel.app/medium/@thexnumb/2)
 <!-- MEDIUM_POSTS_END -->
 
 ## 📊 GitHub Stats  
