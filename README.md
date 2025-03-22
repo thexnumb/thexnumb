@@ -4,7 +4,7 @@ I'm a **26-year-old security researcher** who has been on a journey to break int
 🔎 My favorite vulnerability type? **Broken Authentication**—digging into authentication flaws and bypass techniques is what excites me the most!  
 🚀 My motto: **"Just go with the flow and enjoy the journey!"** 😊  
 
-## 🔥 Weekly Productivity  
+## 🔥 Weekly 
 ⏳ **Time Spent on:**  
 ![Toggl Time](./toggl_weekly_report.svg)  
 
