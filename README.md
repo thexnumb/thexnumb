@@ -1,6 +1,6 @@
 # 🛡️ Security Enthusiast & Bug Bounty Hunter  
 👋 Hi! I'm **Ali**, also known as **THEXNUMB**.  
-I'm a **26-year-old security researcher** who has been on a journey to break into the **InfoSec and Cybersecurity** field for several years. It hasn't been easy—full of challenges and setbacks—but I've recently decided to fully dedicate my time to **learning and working** in this industry.  
+I'm a **26-years-old security researcher** who has been on a journey to break into the **InfoSec and Cybersecurity** field for several years. It hasn't been easy—full of challenges and setbacks—but I've recently decided to fully dedicate my time to **learning and working** in this industry.  
 🔎 My favorite vulnerability type? **Broken Authentication**—digging into authentication flaws and bypass techniques is what excites me the most!  
 🚀 My motto: **"Just go with the flow and enjoy the journey!"** 😊  
 
