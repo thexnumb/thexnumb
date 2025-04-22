@@ -36,6 +36,6 @@ jobs:
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
-          git add toggl_yearly_Personal_report.svg toggl_yearly_Security_report.svg
+          git add toggl_current_year_Personal_report.svg toggl_current_year_Security_report.svg 
           git commit -m "Update Toggl weekly report" || echo "No changes to commit"
           git push
