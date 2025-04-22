@@ -9,10 +9,9 @@ I'm a **26-years-old security researcher** who has been on a journey to break in
 <!-- MEDIUM_POSTS_START -->
 ![Recent Article](https://github-readme-medium-recent-article.vercel.app/medium/@thexnumb/0)
 <!-- MEDIUM_POSTS_END -->
-
-## 🔥 Weekly 
-⏳ **Time Spent on:**  
-![Toggl Time](./toggl_weekly_Security_report.svg) ![Toggl Time](./toggl_weekly_Personal_report.svg)
+ 
+## ⏳ 2025 Time Spent Report 
+![Toggl Time](./toggl_yearly_Security_report.svg) ![Toggl Time](./toggl_yearly_Personal_report.svg)
 
 ## 📊 GitHub Stats  
 ![GitHub Stats](https://github-readme-stats.vercel.app/api?username=thexnumb&show_icons=true&theme=dark)  
