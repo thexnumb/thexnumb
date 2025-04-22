@@ -2,30 +2,30 @@ import os
 import requests
 import json
 import base64
-from datetime import datetime, timedelta
+from datetime import datetime
 
-# Function to calculate the start and end dates of the previous year
-def get_previous_year_dates():
+# Function to calculate the start and end dates of the current year
+def get_current_year_dates():
     today = datetime.today()
-    start_of_last_year = datetime(today.year - 1, 1, 1)
-    end_of_last_year = datetime(today.year - 1, 12, 31)
-    return start_of_last_year.date().strftime('%Y-%m-%d'), end_of_last_year.date().strftime('%Y-%m-%d')
+    start_of_this_year = datetime(today.year, 1, 1)
+    end_of_this_year = datetime(today.year, 12, 31)
+    return start_of_this_year.date().strftime('%Y-%m-%d'), end_of_this_year.date().strftime('%Y-%m-%d')
 
-# Set Start and End Dates for the Previous Year
-start_date, end_date = get_previous_year_dates()
+# Set Start and End Dates for the Current Year
+start_date, end_date = get_current_year_dates()
 os.environ['START_DATE'] = start_date
 os.environ['END_DATE'] = end_date
 
-# Fetch Weekly Report Data
+# Fetch Yearly Report Data
 workspace_id = os.getenv('TOGGL_WORKSPACE_ID')
 project_sec = os.getenv('PROJECT_ID')
 project_per = os.getenv('PROJECT_PER')
 api_token = os.getenv('TOGGL_API_TOKEN')
 
-def create_svg (id):
+def create_svg(id):
     # API URL
     url = f"https://api.track.toggl.com/reports/api/v3/workspace/{workspace_id}/projects/{id}/summary"
-    
+
     # Encode API Token
     auth_token = base64.b64encode(f"{api_token}:api_token".encode()).decode()
 
@@ -78,12 +78,12 @@ def create_svg (id):
     </svg>'''
 
     # Save to SVG file
-    svg_filename = f'toggl_yearly_{project_name}_report.svg'
+    svg_filename = f'toggl_current_year_{project_name}_report.svg'
     with open(svg_filename, 'w') as svg_file:
         svg_file.write(svg_content)
 
     print(f"SVG file generated successfully: {svg_filename}")
 
-# Generate yearly reports
+# Generate current year reports
 create_svg(205117233)  # Security
 create_svg(205117652)  # Personal
