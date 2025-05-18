@@ -4,6 +4,9 @@ I'm a **26-years-old security researcher** who has been on a journey to break in
 🔎 My favorite vulnerability type? **Broken Authentication**—digging into authentication flaws and bypass techniques is what excites me the most!  
 🚀 My motto: **"Just go with the flow and enjoy the journey!"** 😊  
 
+## YouTube Stats
+![Youtube Stats](./youtube_stats.svg)
+
 ## ✍️ Latest Medium Posts  
 📖 **Read my latest article:**  
 <!-- MEDIUM_POSTS_START -->
