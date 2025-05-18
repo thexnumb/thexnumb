@@ -24,12 +24,12 @@ video_count = stats.get("videoCount", "0")
 dwg = svgwrite.Drawing(OUTPUT_SVG, size=("420px", "200px"), profile="tiny")
 
 # Title
-dwg.add(dwg.text("THEXNUMB's YouTube Stats", insert=(90, 45), font_size="18px", fill="orange", font_family="Arial"))
+dwg.add(dwg.text("THEXNUMB's YouTube Stats", insert=(90, 45), font_size="18px", fill="gray", font_family="Arial"))
 
 # Stats
-dwg.add(dwg.text(f"👁️ Views: {view_count}", insert=(90, 80), font_size="16px", fill="orange"))
-dwg.add(dwg.text(f"👤 Subscribers: {sub_count}", insert=(90, 110), font_size="16px", fill="orange"))
-dwg.add(dwg.text(f"🎞️ Videos: {video_count}", insert=(90, 140), font_size="16px", fill="orange"))
+dwg.add(dwg.text(f"👁️ Views: {view_count}", insert=(90, 80), font_size="16px", fill="gray"))
+dwg.add(dwg.text(f"👤 Subscribers: {sub_count}", insert=(90, 110), font_size="16px", fill="gray"))
+dwg.add(dwg.text(f"🎞️ Videos: {video_count}", insert=(90, 140), font_size="16px", fill="gray"))
 
 # Save SVG
 dwg.save()
