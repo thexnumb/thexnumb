@@ -23,10 +23,6 @@ video_count = stats.get("videoCount", "0")
 # === GENERATE SVG ===
 dwg = svgwrite.Drawing(OUTPUT_SVG, size=("420px", "200px"), profile="tiny")
 
-# YouTube logo (simple version)
-dwg.add(dwg.rect(insert=(20, 20), size=(50, 35), rx=8, ry=8, fill="#FF0000"))
-dwg.add(dwg.polygon(points=[(40, 30), (40, 45), (58, 37)], fill="white"))
-
 # Title
 dwg.add(dwg.text("THEXNUMB's YouTube Stats", insert=(90, 45), font_size="18px", fill="orange", font_family="Arial"))
 
