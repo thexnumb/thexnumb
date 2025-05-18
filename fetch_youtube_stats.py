@@ -31,9 +31,9 @@ dwg.add(dwg.polygon(points=[(40, 30), (40, 45), (58, 37)], fill="white"))
 dwg.add(dwg.text("THEXNUMB's YouTube Stats", insert=(90, 45), font_size="18px", fill="black", font_family="Arial"))
 
 # Stats
-dwg.add(dwg.text(f"👁️ Views: {view_count}", insert=(90, 80), font_size="16px", fill="black"))
-dwg.add(dwg.text(f"👤 Subscribers: {sub_count}", insert=(90, 110), font_size="16px", fill="black"))
-dwg.add(dwg.text(f"🎞️ Videos: {video_count}", insert=(90, 140), font_size="16px", fill="black"))
+dwg.add(dwg.text(f"👁️ Views: {view_count}", insert=(90, 80), font_size="16px", fill="white"))
+dwg.add(dwg.text(f"👤 Subscribers: {sub_count}", insert=(90, 110), font_size="16px", fill="white"))
+dwg.add(dwg.text(f"🎞️ Videos: {video_count}", insert=(90, 140), font_size="16px", fill="white"))
 
 # Save SVG
 dwg.save()
