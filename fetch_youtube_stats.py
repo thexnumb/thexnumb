@@ -2,8 +2,8 @@ import requests
 import svgwrite
 
 # === CONFIGURATION ===
-API_KEY = ""  # Replace with your actual API key
-CHANNEL_ID = ""  # Replace with your channel ID
+API_KEY = os.getenv('YOUTUBE_API')  
+CHANNEL_ID = os.getenv('YOUTUBE_CHANNEL_ID')  
 OUTPUT_SVG = "youtube_stats.svg"
 
 # === FETCH DATA ===
