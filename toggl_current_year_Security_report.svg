@@ -8,9 +8,9 @@
 
         <!-- Date Range -->
         <text x="50%" y="45%" font-size="14" font-family="Arial, sans-serif"
-            text-anchor="middle" fill="white">From 2025-01-01 to 2025-12-31</text>
+            text-anchor="middle" fill="white">From 2026-01-01 to 2026-12-31</text>
 
         <!-- Time Spent -->
         <text x="50%" y="72%" font-size="30" font-family="Arial, sans-serif" font-weight="bold"
-            text-anchor="middle" fill="white">258h 10m</text>
+            text-anchor="middle" fill="white">0h 0m</text>
     </svg>
